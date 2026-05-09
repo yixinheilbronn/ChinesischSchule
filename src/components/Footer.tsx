@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import SchoolLogo from "./SchoolLogo";
+import NavigationQRCode from "./NavigationQRCode"; 
+import SchoolLogo from "./SchoolLogo";
 import { useContent } from "@/contexts/ContentContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { TOOLBAR_POS_KEY } from "@/lib/constants";
@@ -94,6 +96,8 @@ export default function Footer() {
               </p>
             )}
           </address>
+          </div>
+          <NavigationQRCode />
         </div>
       </div>
 
