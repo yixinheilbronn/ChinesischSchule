@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SchoolLogo from "./SchoolLogo";
-import NavigationQRCode from "./NavigationQRCode"; 
-import SchoolLogo from "./SchoolLogo";
+import SchoolLogo from "@/components/SchoolLogo";
+import NavigationQRCode from "@/components/NavigationQRCode"; 
 import { useContent } from "@/contexts/ContentContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { TOOLBAR_POS_KEY } from "@/lib/constants";
