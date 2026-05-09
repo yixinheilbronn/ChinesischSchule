@@ -4,49 +4,41 @@ import { QRCodeCanvas } from "qrcode.react";
 
 /**
  * NavigationQRCode Component
- * Displays a fixed QR code for the website's homepage with bilingual (Chinese & German) instructions.
- * Designed for the global footer to encourage sharing and mobile access.
+ * Standard block layout, sits at the very bottom of the page content.
  */
 export default function NavigationQRCode() {
-  // Hardcoded homepage URL to ensure consistency across all subpages
-  const homeUrl = "https://your-domain.vercel.app"; 
+  const homeUrl = "https://www.yixin-heilbronn.de"; 
 
   return (
-    <footer className="w-full py-12 flex flex-col items-center bg-[#fbfbfb] border-t border-gray-200">
-      <div className="flex flex-col items-center max-w-2xl px-4">
+    // No 'fixed' or 'absolute' here. 
+    // Just a normal footer-style block.
+    <section className="w-full py-8 bg-gray-50 border-t border-gray-200">
+      <div className="container mx-auto px-4 flex flex-col items-center">
         
-        {/* QR Code Container: Styled with a subtle shadow and hover effect */}
-        <div className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 transition-transform hover:scale-105">
-          <QRCodeCanvas
-            value={homeUrl}
-            size={160}
-            level="H" // High error correction for better scannability
-            includeMargin={false}
-          />
-        </div>
-        
-        {/* Bilingual Instruction Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left border-t border-gray-100 pt-6 w-full">
-          
-          {/* Chinese Section */}
-          <div className="flex flex-col items-center md:items-end">
-            <h3 className="text-sm font-bold text-gray-800">官网导航</h3>
-            <p className="text-xs text-gray-500 mt-1">扫码快速访问或长按保存图片</p>
+        <div className="flex flex-col md:flex-row items-center gap-6">
+          {/* QR Code */}
+          <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-100">
+            <QRCodeCanvas
+              value={homeUrl}
+              size={120}
+              level="H"
+            />
           </div>
 
-          {/* German Section */}
-          <div className="flex flex-col items-center md:items-start border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-8">
-            <h3 className="text-sm font-bold text-gray-800">Navigation</h3>
-            <p className="text-xs text-gray-500 mt-1">QR-Code scannen oder für später speichern</p>
+          {/* Bilingual Instructions */}
+          <div className="text-center md:text-left">
+            <div className="mb-3">
+              <h3 className="text-sm font-bold text-school-red">官网导航二维码</h3>
+              <p className="text-xs text-gray-500">手机扫码快速访问，支持长按保存分享</p>
+            </div>
+            <div className="pt-2 border-t border-gray-200">
+              <h3 className="text-sm font-bold text-gray-800">Navigation QR-Code</h3>
+              <p className="text-xs text-gray-500">Scannen Sie den Code oder halten Sie ihn zum Speichern gedrückt</p>
+            </div>
           </div>
-          
         </div>
 
-        {/* Copyright & Footer Meta */}
-        <div className="mt-10 text-[10px] uppercase tracking-widest text-gray-400">
-          © {new Date().getFullYear()} Your Website · Alle Rechte vorbehalten
-        </div>
       </div>
-    </footer>
+    </section>
   );
 }
