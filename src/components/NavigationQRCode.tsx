@@ -1,61 +1,75 @@
 "use client";
 
-import { useState, useEffect } from "react";
-// We use QRCodeSVG instead of Canvas because mobile browsers (Safari/Chrome/WeChat) 
-// recognize SVG as an image, allowing users to "Long Press" to save or scan.
-import { QRCodeSVG } from "qrcode.react"; 
+import { useState, useEffect, useRef } from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 /**
  * NavigationQRCode Component
- * 
- * This component generates a QR code that dynamically points to the current page URL.
- * It is designed to be responsive and mobile-friendly.
+ * Uses a hidden SVG engine to generate a Base64 Data URL, 
+ * then displays it via a standard <img> tag for full mobile compatibility.
  */
 export default function NavigationQRCode() {
-  // Store the URL in state to prevent "Hydration Mismatch" 
-  // (where server and client render different content).
   const [currentUrl, setCurrentUrl] = useState<string>("");
+  const [qrImageData, setQrImageData] = useState<string>("");
+  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    // window.location is only available in the browser. 
-    // This effect ensures the URL is captured after the component mounts on the client.
     if (typeof window !== "undefined") {
       setCurrentUrl(window.location.href);
     }
   }, []);
 
-  // While the URL is being fetched (SSR phase), render a loading placeholder
-  // to maintain layout stability.
+  // Effect to convert SVG to a Base64 Image string whenever the URL changes
+  useEffect(() => {
+    if (currentUrl && svgRef.current) {
+      const svgElement = svgRef.current;
+      const serializer = new XMLSerializer();
+      const source = serializer.serializeToString(svgElement);
+      
+      // Create a Base64 Data URL
+      const base64Data = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(source)))}`;
+      setQrImageData(base64Data);
+    }
+  }, [currentUrl]);
+
+  // Loading state placeholder
   if (!currentUrl) {
-    return (
-      <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700/50 animate-pulse rounded-2xl" />
-    );
+    return <div className="w-full aspect-square bg-gray-800/50 animate-pulse rounded-lg" />;
   }
 
   return (
-    <div className="flex flex-col items-center">
-      {/* 
-        Responsive Container:
-        - w-24 (96px) on mobile
-        - sm:w-32 (128px) on small tablets
-        - md:w-40 (160px) on desktop
-      */}
-      <div className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 w-24 sm:w-32 md:w-40">
+    <div className="flex flex-col items-center w-full">
+      {/* Hidden SVG engine used to generate the image data */}
+      <div className="hidden" aria-hidden="true">
         <QRCodeSVG
+          ref={svgRef}
           value={currentUrl}
-          // size is the internal render resolution. 
-          // 256 is high enough to stay sharp when scaled up.
-          size={256} 
-          level="H" // High error correction (allows for small damages/blockage)
+          size={512} // High internal resolution for crisp scaling
+          level="H"
           includeMargin={false}
-          // CSS style '100%' makes the SVG fill the responsive container div above.
-          style={{ width: "100%", height: "auto" }} 
         />
       </div>
+
+      {/* 
+        Responsive Image Container:
+        The 'w-full' class makes the QR code automatically adjust 
+        to the width of its parent element.
+      */}
+      <div className="p-2 bg-white rounded-xl shadow-sm border border-gray-100 w-full max-w-[160px]">
+        {qrImageData ? (
+          <img
+            src={qrImageData}
+            alt="QR Code for sharing"
+            className="w-full h-auto block" // Automatically adjustable size
+            style={{ imageRendering: "pixelated" }} 
+          />
+        ) : (
+          <div className="w-full aspect-square bg-gray-100 animate-pulse" />
+        )}
+      </div>
       
-      {/* Visual hint for users */}
-      <p className="text-[10px] text-gray-400 mt-2 font-bold text-center leading-none uppercase tracking-wider">
-        Long press to share
+      <p className="text-[10px] text-gray-400 mt-2 font-bold text-center uppercase tracking-tighter">
+        Save or Share
       </p>
     </div>
   );
