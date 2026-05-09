@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import SchoolLogo from "@/components/SchoolLogo";
-import NavigationQRCode from "@/components/NavigationQRCode"; 
 import { useContent } from "@/contexts/ContentContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { TOOLBAR_POS_KEY } from "@/lib/constants";
+import NavigationQRCode from "@/components/NavigationQRCode";
 
 export default function Footer() {
   const { getContent, isEnglishVisible } = useContent();
@@ -13,10 +13,9 @@ export default function Footer() {
   const [toolbarAtBottom, setToolbarAtBottom] = useState(() => {
     try {
       return sessionStorage.getItem(TOOLBAR_POS_KEY) !== "top";
-    } catch { return true; /* SSR / privacy mode */ }
+    } catch { return true; }
   });
 
-  // Listen for toolbar position changes
   useEffect(() => {
     if (!isAdmin) return;
     function handleChange(e: Event) {
@@ -29,7 +28,6 @@ export default function Footer() {
 
   const de = getContent("de");
   const zh = getContent("zh");
-
   const en = getContent("en");
   const showEn = isEnglishVisible("footer");
 
@@ -44,14 +42,15 @@ export default function Footer() {
   return (
     <footer className={`bg-school-dark text-white mt-auto${isAdmin && toolbarAtBottom ? " pb-28" : ""}`} data-testid="footer">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid sm:grid-cols-3 gap-8">
-        {/* Brand */}
+        
+        {/* Section 1: Brand */}
         <div className="flex flex-col items-start gap-3">
           <SchoolLogo size={80} className="[filter:invert(1)_brightness(0.85)]" />
           <p className="font-cn font-bold text-lg leading-tight">海尔布隆一心中文学校</p>
           <p className="text-xs text-gray-400">Yi Xin Chinesische Sprachschule Heilbronn</p>
         </div>
 
-        {/* Quick links */}
+        {/* Section 2: Links */}
         <div>
           <h3 className="font-bold text-school-red mb-3 tracking-wide uppercase text-sm">
             <span className="font-cn">{zh.footer.navigationTitle}</span> · {de.footer.navigationTitle}{showEn && ` · ${en.footer.navigationTitle}`}
@@ -67,39 +66,37 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Contact */}
-        <div>
-          <h3 className="font-bold text-school-red mb-3 tracking-wide uppercase text-sm">
-            <span className="font-cn">{zh.footer.contactTitle}</span> · {de.footer.contactTitle}{showEn && ` · ${en.footer.contactTitle}`}
-          </h3>
-          <address className="not-italic text-sm text-gray-300 space-y-1">
-            {de.contact.addressLines.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-            <p className="mt-2">
-              <a
-                href={`mailto:${de.contact.email}`}
-                className="hover:text-school-red transition-colors"
-              >
-                {de.contact.email}
-              </a>
-            </p>
-            {de.contact.phone && (
-              <p>
-                <a
-                  href={`tel:${de.contact.phone.replace(/\s/g, "")}`}
-                  className="hover:text-school-red transition-colors"
-                >
-                  {de.contact.phone}
+        {/* Section 3: Contact & QR Code */}
+        <div className="flex flex-col sm:flex-row gap-6 justify-between items-start">
+          <div className="flex-1">
+            <h3 className="font-bold text-school-red mb-3 tracking-wide uppercase text-sm">
+              <span className="font-cn">{zh.footer.contactTitle}</span> · {de.footer.contactTitle}{showEn && ` · ${en.footer.contactTitle}`}
+            </h3>
+            <address className="not-italic text-sm text-gray-300 space-y-1">
+              {de.contact.addressLines.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+              <p className="mt-2">
+                <a href={`mailto:${de.contact.email}`} className="hover:text-school-red transition-colors">
+                  {de.contact.email}
                 </a>
               </p>
-            )}
-          </address>
+              {de.contact.phone && (
+                <p>
+                  <a href={`tel:${de.contact.phone.replace(/\s/g, "")}`} className="hover:text-school-red transition-colors">
+                    {de.contact.phone}
+                  </a>
+                </p>
+              )}
+            </address>
           </div>
+
+          {/* QR Code Component */}
           <NavigationQRCode />
         </div>
       </div>
 
+      {/* Bottom Bar - Line 103 usually starts here */}
       <div className="border-t border-gray-700 text-center py-4 text-xs text-gray-500">
         © {new Date().getFullYear()} 海尔布隆一心中文学校 · Yi Xin Chinesische Sprachschule
         Heilbronn{showEn && " · Yi Xin Chinese Language School"}
