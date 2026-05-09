@@ -2,6 +2,19 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  
+ /** Vercel Blob as white list*/
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "kbwh6t8wdcimiyna.public.blob.vercel-storage.com",
+        port: "",
+        pathname: "/**", //
+      },
+    ],
+  },
+  
   async headers() {
     return [
       {
