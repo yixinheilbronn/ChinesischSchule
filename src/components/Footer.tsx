@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import SchoolLogo from "./SchoolLogo";
+import SchoolLogo from "@/components/SchoolLogo";
 import { useContent } from "@/contexts/ContentContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { TOOLBAR_POS_KEY } from "@/lib/constants";
-// Import the QR Code component we created earlier
-import NavigationQRCode from "./NavigationQRCode";
+import NavigationQRCode from "@/components/NavigationQRCode";
 
 export default function Footer() {
   const { getContent, isEnglishVisible } = useContent();
@@ -48,28 +47,29 @@ export default function Footer() {
   ];
 
   return (
-    <footer 
-      className={`bg-school-dark text-white mt-auto${isAdmin && toolbarAtBottom ? " pb-28" : ""}`} 
-      data-testid="footer"
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 grid sm:grid-cols-3 gap-8">
+    <footer className={`bg-school-dark text-white mt-auto${isAdmin && toolbarAtBottom ? " pb-28" : ""}`} data-testid="footer">
+      {/* 
+          OPTIMIZED GRID: 
+          Uses 4 columns on laptop so Section 3 can span 2/4 (50% width).
+      */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 sm:grid-cols-4 gap-10">
         
-        {/* Section 1: Brand & Logo */}
+        {/* Section 1: Brand (Span 1) */}
         <div className="flex flex-col items-start gap-3">
           <SchoolLogo size={80} className="[filter:invert(1)_brightness(0.85)]" />
           <p className="font-cn font-bold text-lg leading-tight">海尔布隆一心中文学校</p>
           <p className="text-xs text-gray-400">Yi Xin Chinesische Sprachschule Heilbronn</p>
         </div>
 
-        {/* Section 2: Quick Links Navigation */}
-        <div>
-          <h3 className="font-bold text-school-red mb-3 tracking-wide uppercase text-sm">
+        {/* Section 2: Links (Span 1) */}
+        <div className="sm:pl-4">
+          <h3 className="font-bold text-school-red mb-4 tracking-wide uppercase text-sm">
             <span className="font-cn">{zh.footer.navigationTitle}</span> · {de.footer.navigationTitle}{showEn && ` · ${en.footer.navigationTitle}`}
           </h3>
-          <ul className="space-y-2 text-sm text-gray-300">
+          <ul className="space-y-3 text-sm text-gray-300">
             {navLinks.map(([deLabel, zhLabel, enLabel, href]) => (
               <li key={href}>
-                <a href={href} className="hover:text-school-red transition-colors">
+                <a href={href} className="hover:text-school-red transition-colors block">
                   <span className="font-cn">{zhLabel}</span> · {deLabel}{showEn && ` · ${enLabel}`}
                 </a>
               </li>
@@ -77,49 +77,59 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Section 3: Contact Information & QR Code */}
-        {/* We use flex-col on mobile and flex-row on larger screens for side-by-side layout */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-between items-start">
+        {/* 
+            Section 3: Contact & QR Code (Span 2)
+            This section now has 50% of the footer width on laptop.
+        */}
+        <div className="sm:col-span-2 flex flex-col md:flex-row gap-8 justify-between items-start border-t border-gray-800 pt-8 sm:border-t-0 sm:pt-0 sm:pl-8">
           <div className="flex-1">
-            <h3 className="font-bold text-school-red mb-3 tracking-wide uppercase text-sm">
+            <h3 className="font-bold text-school-red mb-4 tracking-wide uppercase text-sm">
               <span className="font-cn">{zh.footer.contactTitle}</span> · {de.footer.contactTitle}{showEn && ` · ${en.footer.contactTitle}`}
             </h3>
-            <address className="not-italic text-sm text-gray-300 space-y-1">
+            <address className="not-italic text-sm text-gray-300 space-y-2 leading-relaxed">
               {de.contact.addressLines.map((line) => (
                 <p key={line}>{line}</p>
               ))}
-              <p className="mt-2">
-                <a href={`mailto:${de.contact.email}`} className="hover:text-school-red transition-colors">
-                  {de.contact.email}
-                </a>
-              </p>
-              {de.contact.phone && (
+              <div className="pt-2 space-y-1">
                 <p>
-                  <a href={`tel:${de.contact.phone.replace(/\s/g, "")}`} className="hover:text-school-red transition-colors">
-                    {de.contact.phone}
+                  <a href={`mailto:${de.contact.email}`} className="hover:text-school-red transition-colors">
+                    {de.contact.email}
                   </a>
                 </p>
-              )}
+                {de.contact.phone && (
+                  <p>
+                    <a href={`tel:${de.contact.phone.replace(/\s/g, "")}`} className="hover:text-school-red transition-colors">
+                      {de.contact.phone}
+                    </a>
+                  </p>
+                )}
+              </div>
             </address>
           </div>
 
-          {/* Dynamic QR Code Component */}
-          <NavigationQRCode />
+          {/* QR Code wrapper to prevent it from growing too large */}
+          <div className="w-32 sm:w-40 shrink-0">
+            <NavigationQRCode />
+          </div>
         </div>
       </div>
 
-      {/* Footer Copyright and Legal Links */}
-      <div className="border-t border-gray-700 text-center py-4 text-xs text-gray-500">
-        © {new Date().getFullYear()} 海尔布隆一心中文学校 · Yi Xin Chinesische Sprachschule
-        Heilbronn{showEn && " · Yi Xin Chinese Language School"}
-        <span className="mx-2">·</span>
-        <a href="/impressum" className="hover:text-school-red transition-colors underline">
-          Legal Notice · Impressum
-        </a>
-        <span className="mx-2">·</span>
-        <a href="/privacy" className="hover:text-school-red transition-colors underline">
-          Privacy Policy · Datenschutz
-        </a>
+      <div className="border-t border-gray-700 text-center py-6 text-[10px] sm:text-xs text-gray-500">
+        <div className="max-w-6xl mx-auto px-4">
+          <p className="mb-2">
+            © {new Date().getFullYear()} 海尔布隆一心中文学校 · Yi Xin Chinesische Sprachschule Heilbronn
+            {showEn && " · Yi Xin Chinese Language School"}
+          </p>
+          <div className="flex justify-center gap-2 items-center opacity-80">
+            <a href="/impressum" className="hover:text-school-red transition-colors underline">
+              法律声明 · Impressum{showEn && " · Legal Notice"}
+            </a>
+            <span className="text-gray-700">|</span>
+            <a href="/privacy" className="hover:text-school-red transition-colors underline">
+              隐私政策 · Datenschutz{showEn && " · Privacy Policy"}
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );
