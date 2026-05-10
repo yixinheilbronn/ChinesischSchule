@@ -3,6 +3,7 @@
 import React from "react";
 import type { SiteContent } from "@/i18n/translations";
 import { EditField, EditArea, EditBlock } from "@/components/admin/EditHelpers";
+import SchoolLogo from "@/components/SchoolLogo";
 
 interface HeroSectionProps {
   isAdmin: boolean;
@@ -44,7 +45,7 @@ export default function HeroSection({
             className="absolute -left-16 -bottom-16 w-64 h-64 rounded-full border-2 border-white/5 pointer-events-none"
           />
 
-          <div className="max-w-6xl mx-auto flex flex-col items-center gap-10">
+          <div className="max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
             <div className="flex-1 animate-fade-in-up">
               {isAdmin ? (
                 <EditBlock label="School Name" className="p-3 space-y-2 bg-school-dark mb-3">
@@ -181,6 +182,12 @@ export default function HeroSection({
                   </div>
                 </>
               )}
+            </div>
+
+            <div className="flex-shrink-0">
+              <div className="w-48 h-48 md:w-56 md:h-56">
+                <SchoolLogo responsive={true} />
+              </div>
             </div>
           </div>
         </section>
