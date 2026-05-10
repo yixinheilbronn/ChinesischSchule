@@ -56,8 +56,8 @@ export default function Footer() {
         
         {/* Section 1: Brand (Span 1) */}
         <div className="flex flex-col items-start gap-3">
-          {/*  Replace the SchoolLogo line (line 59) with:*/}
-          <div className="w-20 h-20">
+          {/* Responsive logo - automatically adjusts size */}
+          <div className="w-24 sm:w-32 md:w-40 h-24 sm:h-32 md:h-40">
             <SchoolLogo responsive={true} />
           </div>
           <p className="font-cn font-bold text-lg leading-tight">海尔布隆一心中文学校</p>
