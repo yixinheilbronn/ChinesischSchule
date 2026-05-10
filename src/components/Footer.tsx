@@ -10,12 +10,17 @@ import NavigationQRCode from "@/components/NavigationQRCode";
 export default function Footer() {
   const { getContent, isEnglishVisible } = useContent();
   const { isAdmin } = useAuth();
+  
+  // State to track if the admin toolbar is positioned at the bottom
   const [toolbarAtBottom, setToolbarAtBottom] = useState(() => {
     try {
       return sessionStorage.getItem(TOOLBAR_POS_KEY) !== "top";
-    } catch { return true; }
+    } catch { 
+      return true; // Fallback for SSR or privacy mode 
+    }
   });
 
+  // Effect to listen for changes in the admin toolbar position
   useEffect(() => {
     if (!isAdmin) return;
     function handleChange(e: Event) {
@@ -26,11 +31,13 @@ export default function Footer() {
     return () => window.removeEventListener("toolbar-position-change", handleChange);
   }, [isAdmin]);
 
+  // Fetch localized content
   const de = getContent("de");
   const zh = getContent("zh");
   const en = getContent("en");
   const showEn = isEnglishVisible("footer");
 
+  // Define navigation links for the footer
   const navLinks: [string, string, string, string][] = [
     [de.nav.home, zh.nav.home, en.nav.home, "/#home"],
     [de.nav.courses, zh.nav.courses, en.nav.courses, "/#courses"],
