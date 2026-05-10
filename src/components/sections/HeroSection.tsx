@@ -185,8 +185,8 @@ export default function HeroSection({
             </div>
 
             <div className="flex-shrink-0">
-              <div className="logo-circle bg-white p-4 shadow-2xl" data-testid="hero-logo">
-                <SchoolLogo size={200} />
+              <div className="w-48 h-48 md:w-56 md:h-56">
+                <SchoolLogo responsive={true} />
               </div>
             </div>
           </div>

@@ -56,6 +56,7 @@ export default function Footer() {
         
         {/* Section 1: Brand (Span 1) */}
         <div className="flex flex-col items-start gap-3">
+          {/*  Replace the SchoolLogo line (line 59) with:*/}
           <div className="w-20 h-20">
             <SchoolLogo responsive={true} />
           </div>

@@ -26,7 +26,7 @@ export default function SchoolLogo({
   // Fallback to fixed size if responsive is false
   return (
     <Image
-      src="/logo.jpg"
+      src="@/public/logo.jpg"
       alt="Yi Xin Chinese Language School Logo"
       width={size || 160}
       height={size || 160}
