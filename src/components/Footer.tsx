@@ -56,7 +56,10 @@ export default function Footer() {
         
         {/* Section 1: Brand (Span 1) */}
         <div className="flex flex-col items-start gap-3">
-          <SchoolLogo size={80} className="[filter:invert(1)_brightness(0.85)]" />
+          // Replace the SchoolLogo line (line 59) with:
+          <div className="w-20 h-20">
+            <SchoolLogo responsive={true} />
+          </div>
           <p className="font-cn font-bold text-lg leading-tight">海尔布隆一心中文学校</p>
           <p className="text-xs text-gray-400">Yi Xin Chinesische Sprachschule Heilbronn</p>
         </div>
