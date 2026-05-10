@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import SchoolLogo from "./SchoolLogo";
+import SchoolLogo from "@/components/SchoolLogo";
 import { useContent } from "@/contexts/ContentContext";
 
 const navLinks = [
@@ -33,19 +33,6 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b-2 border-school-red shadow-sm" data-testid="navbar">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
-        {/* Logo + school name */}
-        <Link href="/" className="flex items-center gap-3 group" aria-label="Yi Xin Schulhomepage" data-testid="navbar-logo">
-          <SchoolLogo size={44} />
-          <div className="leading-tight">
-            <p className="font-cn font-bold text-school-dark text-base sm:text-lg leading-none tracking-wide">
-              一心中文学校
-            </p>
-            <p className="text-[10px] sm:text-xs text-gray-500 tracking-tight">
-              Yi Xin Sprachschule Heilbronn
-            </p>
-          </div>
-        </Link>
-
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1" aria-label="Hauptnavigation" data-testid="desktop-nav">
           {navLinks.map((link) => (
